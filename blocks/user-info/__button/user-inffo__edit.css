@@ -1,0 +1,11 @@
+.user-info__edit {
+    max-width: 38px;
+    max-height: 18px;
+    font-size: 12px;
+    line-height: 15px;
+    margin-top: 24px;
+    background-color: transparent;
+    border: 1px solid white;
+    color: white;
+    cursor: pointer;
+}
