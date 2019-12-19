@@ -1,8 +1,9 @@
 import "./style.css";
-const serverUrl = NODE_ENV === 'development' ? 'http://praktikum.tk/cohort5' : 'https://praktikum.tk/cohort5'
+import Api from "./js/Api";
+import Popup from "./js/Popup";
 
+const serverUrl = NODE_ENV === 'development' ? 'http://praktikum.tk/cohort5' : 'https://praktikum.tk/cohort5'
 const placesList = document.querySelector('.places-list');
-const delButton = placesList.querySelector('.place-card__delete-icon');
 const popup = document.querySelector('.popup');
 const popupEdit = document.querySelector('.popup__edit');
 const popupImage = document.querySelector('.popup__image');
@@ -18,104 +19,81 @@ const userName = document.querySelector('.user-info__name');
 const userJob = document.querySelector('.user-info__job');
 
 function openImagePopup(imageLink) {
-  imageLink = event.target.closest('.place-card__image');
-  if (!imageLink) return; 
-    if (!placesList.contains(imageLink)) return; 
-    imageLink=imageLink.getAttribute('style').slice(22, -1); 
-    const img = document.querySelector('.popup__content_img');
-    img.setAttribute('src', imageLink);
-    popupImg.open();
-}
+   imageLink = event.target.closest('.place-card__image');
+    if (!imageLink) return; 
+      if (!placesList.contains(imageLink)) return; 
+      imageLink=imageLink.getAttribute('style').slice(22, -1); 
+      const img = document.querySelector('.popup__content_img');
+      img.setAttribute('src', imageLink);
+      popupImg.open();
+  }
 class Card {
-  constructor (name, link, openImageCallback) {
-    this.name = name;
-    this.link = link;
-    this.openImageCallback = openImageCallback;
-    this.placeCard = this.create(name, link);
-    this.like = this.like.bind(this);
-    this.remove = this.remove.bind(this);
-    this.openImage = this.openImage.bind(this);
-    this.placeCard.querySelector('.place-card__like-icon').addEventListener('click', this.like);
-    this.placeCard.querySelector('.place-card__delete-icon').addEventListener('click', this.remove);
-    this.placeCard.addEventListener('click', this.openImage);    
-  }
-
-  like () {
-    this.placeCard.querySelector('.place-card__like-icon').classList.toggle('place-card__like-icon_liked');
-  }
-
-  remove () {   
-    this.placeCard.parentNode.removeChild(this.placeCard);
-  }
- 
-  create () {
-    const placeCard = document.createElement('div')
-    placeCard.classList.add('place-card');
-
-    const cardImage = document.createElement('div'); 
-    cardImage.classList.add('place-card__image');
-    placeCard.appendChild(cardImage);
-    cardImage.setAttribute('style','background-image: url('+ this.link +')');
+    constructor (name, link, openImageCallback) {
+      this.name = name;
+      this.link = link;
+      this.openImageCallback = openImageCallback;
+      this.placeCard = this.create(name, link);
+      this.like = this.like.bind(this);
+      this.remove = this.remove.bind(this);
+      this.openImage = this.openImage.bind(this);
+      this.placeCard.querySelector('.place-card__like-icon').addEventListener('click', this.like);
+      this.placeCard.querySelector('.place-card__delete-icon').addEventListener('click', this.remove);
+      this.placeCard.addEventListener('click', this.openImage);    
+    }
   
-    const cardDescription = document.createElement('div');
-    cardDescription.classList.add('place-card__description');
-    placeCard.appendChild(cardDescription);
+    like () {
+      this.placeCard.querySelector('.place-card__like-icon').classList.toggle('place-card__like-icon_liked');
+    }
   
-    const cardName = document.createElement('h3');
-    cardName.classList.add('place-card__name');
-    cardName.textContent = this.name;
-    cardDescription.appendChild(cardName);
-
-    let likeButton = document.createElement('button');
-    likeButton.classList.add('place-card__like-icon');
-    cardDescription.appendChild(likeButton);
-
-    let delButton = document.createElement('button');
-    delButton.classList.add('place-card__delete-icon');
-    cardImage.appendChild(delButton);
+    remove () {   
+      this.placeCard.parentNode.removeChild(this.placeCard);
+    }
+   
+    create () {
+      const placeCard = document.createElement('div')
+      placeCard.classList.add('place-card');
   
-    return placeCard;
-  }
+      const cardImage = document.createElement('div'); 
+      cardImage.classList.add('place-card__image');
+      placeCard.appendChild(cardImage);
+      cardImage.setAttribute('style','background-image: url('+ this.link +')');
+    
+      const cardDescription = document.createElement('div');
+      cardDescription.classList.add('place-card__description');
+      placeCard.appendChild(cardDescription);
+    
+      const cardName = document.createElement('h3');
+      cardName.classList.add('place-card__name');
+      cardName.textContent = this.name;
+      cardDescription.appendChild(cardName);
+  
+      let likeButton = document.createElement('button');
+      likeButton.classList.add('place-card__like-icon');
+      cardDescription.appendChild(likeButton);
+  
+      let delButton = document.createElement('button');
+      delButton.classList.add('place-card__delete-icon');
+      cardImage.appendChild(delButton);
+    
+      return placeCard;
+    }
+    openImage() {
+        this.openImageCallback(this.link);
+      }
+    }
+export default class CardList {
 
-  openImage() {
-    this.openImageCallback(this.link);
+    constructor(container, arr) {
+        this.container = container;
+        this.arr = arr;
+    }
+  
+    addCard(name, link) {
+      const cardElement = new Card (name, link, openImagePopup);
+      this.container.appendChild(cardElement.placeCard);
+    }
   }
-}
-
-class CardList {
-  constructor(container, arr) {
-      this.container = container;
-      this.arr = arr;
-     // this.render();
-  }
-  // render() {
-  //   this.arr.forEach((item) => {
-  //     this.addCard(item.name, item.link);
-  //   });
-  // }
-
-  addCard(name, link) {
-    const cardElement = new Card (name, link, openImagePopup);
-    this.container.appendChild(cardElement.placeCard);
-  }
-}
 const cardList = new CardList(placesList);
-
-class Popup {
-  constructor(element, openClassName) {
-    this.element = element;  
-    this.openClassName = openClassName; 
-    const closeButton = this.element.querySelector('.popup__close');
-    this.close = this.close.bind(this);
-    closeButton.addEventListener('click', this.close);
-  }
-  open() {
-    this.element.classList.add(this.openClassName);
-  }
-  close() {
-    this.element.classList.remove(this.openClassName);
-  }
-}
 
 const popupForm = new Popup (popup, 'popup_is-opened')
 openButtonPopup.addEventListener('click', function () {
@@ -128,55 +106,7 @@ document.querySelector('.user-info__edit').addEventListener('click',function () 
 const popupImg = new Popup (popupImage, 'open-image')
 
 
-class Api {
-  constructor(options) {
-    this.options = options;
-    this.baseUrl = this.options.baseUrl;
-    this.headers = this.options.headers;
-  }
-  getResponseData(res) {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Ошибка: ${res.status}`);
-  }
-  getInitialName() {
-    return fetch(`${this.baseUrl}/users/me`,{
-      headers: this.headers
-    })
-    .then((res) => this.getResponseData(res)
-    )    
-  }
-  
-  getInitialCards() {
-    return fetch(`${this.baseUrl}/cards`, {
-    headers: this.headers
-    })
-    .then(res => this.getResponseData(res)
-    )
-  }
 
-  changeName(name, about){ 
-    return fetch(this.baseUrl + '/users/me', {
-      method: 'PATCH',
-      headers: this.headers,
-      body: JSON.stringify({
-          name: name,
-          about: about,
-      })
-  })  
-}
-  sendCard(name, link){
-    return fetch(this.baseUrl + '/cards', {
-      method: 'POST',
-      headers: this.headers,
-      body: JSON.stringify({
-          name: name,
-          link: link,
-      })
-  })
-}
-}
 
 const api = new Api({
   baseUrl: serverUrl,
