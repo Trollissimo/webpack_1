@@ -1,4 +1,6 @@
 import "./style.css";
+import Popup from "./js/Popup";
+import Api from "./js/Api"
 const serverUrl = NODE_ENV === 'development' ? 'http://praktikum.tk/cohort5' : 'https://praktikum.tk/cohort5'
 
 const placesList = document.querySelector('.places-list');
@@ -86,14 +88,7 @@ class CardList {
   constructor(container, arr) {
       this.container = container;
       this.arr = arr;
-     // this.render();
   }
-  // render() {
-  //   this.arr.forEach((item) => {
-  //     this.addCard(item.name, item.link);
-  //   });
-  // }
-
   addCard(name, link) {
     const cardElement = new Card (name, link, openImagePopup);
     this.container.appendChild(cardElement.placeCard);
@@ -101,21 +96,6 @@ class CardList {
 }
 const cardList = new CardList(placesList);
 
-class Popup {
-  constructor(element, openClassName) {
-    this.element = element;  
-    this.openClassName = openClassName; 
-    const closeButton = this.element.querySelector('.popup__close');
-    this.close = this.close.bind(this);
-    closeButton.addEventListener('click', this.close);
-  }
-  open() {
-    this.element.classList.add(this.openClassName);
-  }
-  close() {
-    this.element.classList.remove(this.openClassName);
-  }
-}
 
 const popupForm = new Popup (popup, 'popup_is-opened')
 openButtonPopup.addEventListener('click', function () {
@@ -126,57 +106,6 @@ document.querySelector('.user-info__edit').addEventListener('click',function () 
   popupEditt.open();
 });
 const popupImg = new Popup (popupImage, 'open-image')
-
-
-class Api {
-  constructor(options) {
-    this.options = options;
-    this.baseUrl = this.options.baseUrl;
-    this.headers = this.options.headers;
-  }
-  getResponseData(res) {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Ошибка: ${res.status}`);
-  }
-  getInitialName() {
-    return fetch(`${this.baseUrl}/users/me`,{
-      headers: this.headers
-    })
-    .then((res) => this.getResponseData(res)
-    )    
-  }
-  
-  getInitialCards() {
-    return fetch(`${this.baseUrl}/cards`, {
-    headers: this.headers
-    })
-    .then(res => this.getResponseData(res)
-    )
-  }
-
-  changeName(name, about){ 
-    return fetch(this.baseUrl + '/users/me', {
-      method: 'PATCH',
-      headers: this.headers,
-      body: JSON.stringify({
-          name: name,
-          about: about,
-      })
-  })  
-}
-  sendCard(name, link){
-    return fetch(this.baseUrl + '/cards', {
-      method: 'POST',
-      headers: this.headers,
-      body: JSON.stringify({
-          name: name,
-          link: link,
-      })
-  })
-}
-}
 
 const api = new Api({
   baseUrl: serverUrl,
