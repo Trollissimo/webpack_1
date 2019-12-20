@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Mesto</title>
+  <link rel="stylesheet" href="style.3569b6acff1a0978dd17.css">
+</head>
+<body>
+  <div class="root">
+    <header class="header root__section">
+      <img src="images/logo.svg" alt="mesto logo" class="logo">
+    </header>
+    <div class="profile root__section">
+      <div class="user-info">
+        <div class="user-info__photo"></div>
+        <div class="user-info__data">
+        <h1 class="user-info__name">Jaques Causteau</h1>
+        <p class="user-info__job">Sailor, Researcher</p>
+        <button class="user-info__edit">Edit</button>
+      </div>
+      <button class="button user-info__button">+</button>
+    </div>
+  </div>
+  <div class="places-list root__section">
+  </div>
+  <div class="popup">
+    <div class="popup__content">
+      <img src="images/close.svg" alt="" class="popup__close">
+      <h3 class="popup__title">Новое место</h3>
+      <form id="form" class="popup__form" name="new">
+          <div class="field">
+          <input  required type="text" name="name" minlength="2" maxlength="30" class="popup__input popup__input_type_name" placeholder="Название">
+          <span  class="error" aria-live="polite"></span>
+          </div>
+          <div class="field">
+          <input  required type="url" name="link" class="popup__input popup__input_type_link-url" placeholder="Ссылка на картинку">
+          <span class="error" aria-live="polite"></span>
+          </div>
+          <button  type class="button popup__button" name = 'button' >+</button>
+      </form>
+    </div>
+  </div>
+  <div class="popup__edit">
+    <div class="popup__content_edit">
+      <img src="images/close.svg" alt="" class="popup__close">
+      <h3 class="popup__title">Редактировать профиль</h3>
+      <form class="popup__form" name="newEdit">
+          <div class="field">
+          <input type="text" required minlength="2" maxlength="30" name="nameEdit" class="popup__input popup__input_type_name" placeholder="Имя" value="Jaques Causteau">
+          <span  class="error" aria-live="polite"></span>
+          </div>
+          <div class="field">
+          <input type="text" required minlength="2" maxlength="30" name="edit" class="popup__input popup__input_type_edit" placeholder="Информация о себе" value='Sailor, Researcher'>
+          <span  class="error" aria-live="polite"></span> 
+        </div>
+          <button type class="button popup__button" name = 'saveButton' >Сохранить</button>
+      </form>
+    </div>
+  </div>
+  <div class="popup__image">
+    <div class='popup__content_image'>
+    <img src="images/close.svg" alt="" class="popup__close">
+    <img class ='popup__content_img' src="" alt="">
+    </div>
+  </div>
+  <script src="main.f31d5e6be416e18b1551.js"></script>
+</body>
+</html>
