@@ -18,7 +18,9 @@ const userPhoto = document.querySelector('.user-info__photo');
 const userName = document.querySelector('.user-info__name');
 const userJob = document.querySelector('.user-info__job');
 
+
 const cardList = new CardList(placesList);
+
 
 const popupForm = new Popup (popup, 'popup_is-opened')
 openButtonPopup.addEventListener('click', function () {
