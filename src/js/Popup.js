@@ -1,3 +1,4 @@
+
 export default class Popup {
     constructor(element, openClassName) {
       this.element = element;  
@@ -12,7 +13,12 @@ export default class Popup {
     close() {
       this.element.classList.remove(this.openClassName);
     }
+    
   }
+  
+
+
+  
 
 
  
